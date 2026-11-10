@@ -1,41 +1,51 @@
 # Cybersecurity Project Portfolio
 
-A beginner-to-intermediate defensive cybersecurity portfolio containing five practical Python projects.
+[![Python CI](https://github.com/NAYEM00000/-cybersecurity-project-portfolio/actions/workflows/python-ci.yml/badge.svg)](https://github.com/NAYEM00000/-cybersecurity-project-portfolio/actions/workflows/python-ci.yml)
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Focus](https://img.shields.io/badge/Focus-Defensive%20Security-0A7EA4)
+
+A beginner-to-intermediate portfolio of five practical **defensive cybersecurity** tools written in Python.
 
 ## Projects
 
-| Project | Purpose | Main features |
+| Project | Purpose | Run from its project folder |
 |---|---|---|
-| Password Security Analyzer | Assess password quality locally | Strength checks, entropy estimate, secure password generation |
-| Web Security Header Checker | Review a website's HTTP security posture | HTTPS check, security headers, cookie flags, JSON report |
-| Authentication Log Analyzer | Detect suspicious login patterns in logs | Failed-login aggregation, brute-force indicators, CSV report |
-| Network Traffic Anomaly Detector | Analyze exported flow records | Port-scan and traffic-volume heuristics from CSV |
-| Phishing URL Risk Analyzer | Flag suspicious URL characteristics | Explainable heuristic score, safe offline analysis |
+| Password Security Analyzer | Local password feedback and secure random password generation | `python password_analyzer.py` |
+| Web Security Header Checker | Check HTTP security headers and cookie attributes | `python header_checker.py https://example.com` |
+| Authentication Log Analyzer | Identify repeated failed logins in CSV exports | `python log_analyzer.py sample_auth.csv --threshold 5` |
+| Network Traffic Anomaly Detector | Flag unusual flow volumes and many destination ports | `python traffic_detector.py sample_flows.csv --ports-threshold 5` |
+| Phishing URL Risk Analyzer | Offline URL-risk heuristics; never visits submitted URLs | `python phishing_analyzer.py "http://login-example.test/verify"` |
 
-## Requirements
+## Quick start
 
-- Python 3.10+
-- Install optional dependencies with `pip install -r requirements.txt`
-- Run each project from its own directory. See its README.
+Requirements: Python 3.10 or newer.
+
+```bash
+git clone https://github.com/NAYEM00000/-cybersecurity-project-portfolio.git
+cd -cybersecurity-project-portfolio
+python -m pip install -r requirements.txt
+```
+
+Run each tool from its own directory. The web checker requires `requests`; the other tools use the Python standard library.
+
+## Tests
+
+```bash
+python -m unittest discover -s tests -v
+python -m compileall -q .
+```
+
+GitHub Actions runs the tests and compile check on pushes and pull requests.
 
 ## Responsible use
 
-These tools are intended for systems and data you own or are explicitly authorized to assess. The web checker sends a single ordinary HTTP GET request to the URL you provide. The traffic detector analyzes CSV data; it does not sniff networks or intercept traffic. The phishing analyzer does not visit submitted URLs.
+Use these tools only on systems, URLs, and data you own or are explicitly authorized to assess. The web checker sends one ordinary GET request; it does not crawl or exploit targets. The traffic detector analyzes CSV exports and does not capture packets. The phishing analyzer is offline and does not open submitted URLs. Passwords entered into the password analyzer are not saved or transmitted.
 
-## Repository structure
+## Limitations
 
-```text
-cybersecurity-project-portfolio/
-├── password-security-analyzer/
-├── web-security-header-checker/
-├── authentication-log-analyzer/
-├── network-traffic-anomaly-detector/
-├── phishing-url-risk-analyzer/
-├── README.md
-├── LICENSE
-└── .gitignore
-```
+All detections are heuristic and may produce false positives or false negatives. Entropy estimates are not guarantees; URL scores are not reputation verdicts; traffic thresholds need environment-specific tuning. These educational projects are not substitutes for professional security testing, SIEM, endpoint protection, or incident response.
 
-## Disclaimer
+## License
 
-Detection results are heuristic and can produce false positives or false negatives. They are educational aids, not substitutes for professional security testing, endpoint protection, SIEM, or incident response.
+MIT. See [LICENSE](LICENSE).
