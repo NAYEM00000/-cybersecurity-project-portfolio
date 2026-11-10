@@ -36,10 +36,11 @@ def build_pipeline(model_name):
         )
     elif model_name == "random_forest":
         classifier = RandomForestClassifier(
-            n_estimators=250,
+            n_estimators=40,
+            max_depth=16,
             class_weight="balanced_subsample",
-            min_samples_leaf=2,
-            n_jobs=-1,
+            min_samples_leaf=4,
+            n_jobs=2,
             random_state=RANDOM_STATE,
         )
     else:

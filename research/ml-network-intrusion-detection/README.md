@@ -2,7 +2,7 @@
 
 A reproducible, defensive cybersecurity research project that compares classical machine-learning baselines on the **official UNSW-NB15 train/test split**.
 
-> **Research status:** implementation and protocol scaffold. No real-dataset experiment has been run yet. Metrics, plots, and findings must be generated from the downloaded dataset before they are reported as research results.
+> **Research status:** first baseline experiment completed on the supplied UNSW-NB15 train/test files. Results are preliminary and dataset-specific; external validation has not yet been performed.
 
 ## Research question
 
@@ -96,6 +96,20 @@ python -m compileall -q src scripts tests
 ```
 
 The tests use small synthetic fixtures only. Passing tests confirms code behaviour; it does **not** establish detection performance on UNSW-NB15.
+
+## First baseline results
+
+The first experiment used 175,341 training records and 82,332 test records from the supplied UNSW-NB15 split. The test split was not used for model tuning. See [`research/results_analysis.md`](research/results_analysis.md) and [`research/run_log_2026-11-11.md`](research/run_log_2026-11-11.md) for methodology, file hashes, metrics, confusion matrices, and limitations.
+
+| Metric | Logistic Regression | Random Forest |
+|---|---:|---:|
+| Accuracy | 83.55% | 90.82% |
+| Balanced accuracy | 82.48% | 90.13% |
+| Attack F1-score | 86.17% | 92.08% |
+| ROC-AUC | 95.60% | 98.44% |
+| False-positive rate | 28.11% | 16.67% |
+
+The Random Forest used 40 trees, maximum depth 16, and minimum leaf size 4. These results describe this benchmark split only; they do not establish real-world or production performance.
 
 ## Research workflow
 

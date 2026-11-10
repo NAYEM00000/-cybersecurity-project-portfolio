@@ -32,7 +32,7 @@ The same preprocessing strategy is used for both classifiers. The pipeline ensur
 ## Baseline models
 
 1. Logistic Regression (`class_weight="balanced"`, fixed random state, bounded iteration count).
-2. Random Forest (`class_weight="balanced_subsample"`, fixed random state, documented tree count).
+2. Random Forest (`class_weight="balanced_subsample"`, fixed random state, 40 trees, maximum depth 16, minimum leaf size 4).
 
 The exact hyperparameters are stored in the source code and must be recorded with the run.
 

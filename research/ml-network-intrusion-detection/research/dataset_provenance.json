@@ -1,0 +1,35 @@
+{
+  "source_file_uploaded": "OneDrive_1_11-11-2026.zip",
+  "source_archive_sha256": "ba34d3e5443cc4c1364b1b9353eeed47590308e64fb5f9cf54fd0d04c1884153",
+  "training_file": {
+    "name": "UNSW_NB15_training-set.csv",
+    "bytes": 32293018,
+    "sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "rows": 175341,
+    "columns": 45
+  },
+  "testing_file": {
+    "name": "UNSW_NB15_testing-set.csv",
+    "bytes": 15380800,
+    "sha256": "734fe6642edf758f7c94d7d9149426b49d202fe8e7bf0bef47392489c3c0a559",
+    "rows": 82332,
+    "columns": 45
+  },
+  "missing_values": {
+    "training": 0,
+    "testing": 0
+  },
+  "duplicate_rows": {
+    "training": 0,
+    "testing": 0
+  },
+  "source_page": "https://research.unsw.edu.au/projects/unsw-nb15-dataset",
+  "archive_origin_note": "The uploaded archive origin was not independently authenticated. The contained files were checked against the expected UNSW-NB15 filenames, 45-column schema, and documented train/test record counts.",
+  "validation_date": "2026-11-11",
+  "input_feature_count": 42,
+  "excluded_columns": [
+    "id",
+    "attack_cat",
+    "label"
+  ]
+}
