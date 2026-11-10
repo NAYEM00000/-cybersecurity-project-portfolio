@@ -26,3 +26,9 @@ The verify command exits with code `0` when no changes are found, `1` when files
 - Does not follow symbolic links.
 - Store the baseline somewhere with appropriate access controls. If an attacker can replace both the files and the baseline, the comparison can be fooled.
 - The tool reports file changes; it does not preserve file contents or restore deleted files.
+
+## Demo screenshot
+
+![file-integrity-monitor demo](../docs/screenshots/06-file-integrity-monitor.png)
+
+See [the screenshot notes](../docs/screenshots/README.md) for how this local demo was run.

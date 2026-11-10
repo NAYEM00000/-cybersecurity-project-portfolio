@@ -24,3 +24,9 @@ python tls_certificate_inspector.py example.com --port 443 --json certificate-re
 ## Scope and limitations
 
 This makes one connection to the host and port you specify. Only inspect hosts you own or are authorized to assess. It is not a port scanner or a full TLS configuration audit. It does not test every protocol version, cipher suite, certificate revocation status, or application endpoint.
+
+## Demo screenshot
+
+![tls-certificate-inspector demo](../docs/screenshots/07-tls-certificate-inspector.png)
+
+See [the screenshot notes](../docs/screenshots/README.md) for how this local demo was run.
