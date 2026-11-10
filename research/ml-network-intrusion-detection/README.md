@@ -153,3 +153,8 @@ See `research/references.md` for source and citation notes.
 ## Responsible use
 
 This is an academic, defensive network-security project. Use only datasets and systems you are authorised to access. Do not use the code to monitor or inspect networks without permission.
+
+
+## Robustness and error analysis
+
+A stratified three-fold cross-validation on the training split and a post-hoc per-attack-category analysis of the official test predictions are documented in [`research/robustness_and_error_analysis.md`](research/robustness_and_error_analysis.md). The independent CIC-IDS2017 evaluation protocol is in [`research/external_validation_plan.md`](research/external_validation_plan.md). External validation has not yet been run.

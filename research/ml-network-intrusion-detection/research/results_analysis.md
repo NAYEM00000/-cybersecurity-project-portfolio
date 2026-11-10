@@ -76,3 +76,12 @@ The Random Forest's impurity-based feature importance is saved in `results/rando
 ## 8. Conclusion
 
 For the supplied UNSW-NB15 test split, the 40-tree Random Forest baseline outperformed the Logistic Regression baseline across the selected aggregate metrics and had a lower false-positive rate. The finding is preliminary and dataset-specific. The next research stage should focus on error analysis, robustness checks, and external validation rather than claiming a novel or production-ready intrusion detector.
+
+
+## 9. Internal cross-validation and attack-category error analysis
+
+A stratified three-fold cross-validation was run on the training split only. Fold-level metrics and mean ± sample standard deviation are available in `results/cross_validation_folds.csv` and `results/cross_validation_summary.csv`. The summary is documented in `research/robustness_and_error_analysis.md`. Random Forest had the stronger mean balanced accuracy, attack precision, F1-score and ROC-AUC; Logistic Regression had slightly higher mean attack recall. This is internal validation, not a second independent test set.
+
+Post-hoc attack-category recall on the official test predictions is available in `results/attack_category_recall.csv`. Fuzzers had the lowest recall for both models and should be the focus of the next error-analysis iteration. The category labels were not used as model features.
+
+A full-row hash screen found no exact 45-column row duplicates across the supplied train/test split. This does not rule out near-duplicate flows or temporal/capture-related leakage. External validation on CIC-IDS2017 remains pending a documented feature mapping.
