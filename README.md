@@ -16,6 +16,33 @@ The projects are for practice and authorized checks. They are not meant to repla
 | [File Integrity Monitor](file-integrity-monitor/) | Creates a SHA-256 baseline and reports files that were added, changed, or removed. |
 | [TLS Certificate Inspector](tls-certificate-inspector/) | Connects once to a host and reports details about its verified TLS certificate. |
 
+## Demo screenshots
+
+The images below are captures from local runs. The log and flow analyzers use the repository's synthetic CSV samples; the HTTP and TLS checks use temporary local test servers. The phishing URL analyzer works offline and does not open the URL.
+
+### Password Security Analyzer
+![Password Security Analyzer demo](docs/screenshots/01-password-security-analyzer.png)
+
+### Web Security Header Checker
+![Web Security Header Checker demo](docs/screenshots/02-web-security-header-checker.png)
+
+### Authentication Log Analyzer
+![Authentication Log Analyzer demo](docs/screenshots/03-authentication-log-analyzer.png)
+
+### Network Traffic Anomaly Detector
+![Network Traffic Anomaly Detector demo](docs/screenshots/04-network-traffic-anomaly-detector.png)
+
+### Phishing URL Risk Analyzer
+![Phishing URL Risk Analyzer demo](docs/screenshots/05-phishing-url-risk-analyzer.png)
+
+### File Integrity Monitor
+![File Integrity Monitor demo](docs/screenshots/06-file-integrity-monitor.png)
+
+### TLS Certificate Inspector
+![TLS Certificate Inspector demo](docs/screenshots/07-tls-certificate-inspector.png)
+
+See [the screenshot notes](docs/screenshots/README.md) for details about how these demos were produced.
+
 ## Run locally
 
 Python 3.10 or newer is required.
