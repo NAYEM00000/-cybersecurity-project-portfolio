@@ -1,46 +1,101 @@
+import getpass
 import math
 import secrets
 import string
-import getpass
+
+
+MIN_LENGTH = 12
+MAX_LENGTH = 128
+COMMON_PASSWORDS = {"password", "123456", "qwerty", "admin", "letmein"}
+
 
 def analyze(password: str) -> dict:
-    pool = 0
-    if any(c.islower() for c in password): pool += 26
-    if any(c.isupper() for c in password): pool += 26
-    if any(c.isdigit() for c in password): pool += 10
-    if any(c in string.punctuation for c in password): pool += len(string.punctuation)
-    entropy = len(password) * math.log2(pool) if pool else 0
-    issues = []
-    if len(password) < 12: issues.append("Use at least 12 characters.")
-    if not any(c.islower() for c in password): issues.append("Add lowercase letters.")
-    if not any(c.isupper() for c in password): issues.append("Add uppercase letters.")
-    if not any(c.isdigit() for c in password): issues.append("Add numbers.")
-    if not any(c in string.punctuation for c in password): issues.append("Add symbols.")
-    common = {"password", "123456", "qwerty", "admin", "letmein"}
-    if password.lower() in common: issues.append("This is a commonly used password.")
-    score = min(100, int(entropy * 1.6))
-    label = "Weak" if score < 35 else "Moderate" if score < 60 else "Strong" if score < 80 else "Very strong"
-    return {"score": score, "label": label, "estimated_entropy_bits": round(entropy, 1), "issues": issues}
+    """Return a simple, local estimate of password strength.
 
-def generate(length=20):
+    The entropy value assumes characters are chosen randomly from the detected
+    character groups. Real passwords often are not random, so treat the score
+    as guidance rather than a security guarantee.
+    """
+    if not isinstance(password, str):
+        raise TypeError("password must be a string")
+
+    pool_size = 0
+    groups = (
+        (string.ascii_lowercase, "Add lowercase letters."),
+        (string.ascii_uppercase, "Add uppercase letters."),
+        (string.digits, "Add numbers."),
+        (string.punctuation, "Add symbols."),
+    )
+    issues = []
+
+    for characters, message in groups:
+        if any(char in characters for char in password):
+            pool_size += len(characters)
+        else:
+            issues.append(message)
+
+    if len(password) < MIN_LENGTH:
+        issues.insert(0, f"Use at least {MIN_LENGTH} characters.")
+
+    if password.lower() in COMMON_PASSWORDS:
+        issues.append("This is a commonly used password.")
+
+    entropy = len(password) * math.log2(pool_size) if pool_size else 0.0
+    score = min(100, int(entropy * 1.6))
+    if score < 35:
+        label = "Weak"
+    elif score < 60:
+        label = "Moderate"
+    elif score < 80:
+        label = "Strong"
+    else:
+        label = "Very strong"
+
+    return {
+        "score": score,
+        "label": label,
+        "estimated_entropy_bits": round(entropy, 1),
+        "issues": issues,
+    }
+
+
+def generate(length: int = 20) -> str:
+    """Generate a password with all four character groups using secrets."""
+    if not isinstance(length, int) or isinstance(length, bool):
+        raise TypeError("length must be an integer")
+    if not MIN_LENGTH <= length <= MAX_LENGTH:
+        raise ValueError(
+            f"length must be between {MIN_LENGTH} and {MAX_LENGTH}"
+        )
+
     alphabet = string.ascii_letters + string.digits + string.punctuation
     while True:
-        value = "".join(secrets.choice(alphabet) for _ in range(length))
-        if (any(c.islower() for c in value) and any(c.isupper() for c in value)
-            and any(c.isdigit() for c in value) and any(c in string.punctuation for c in value)):
-            return value
+        password = "".join(secrets.choice(alphabet) for _ in range(length))
+        if (
+            any(char.islower() for char in password)
+            and any(char.isupper() for char in password)
+            and any(char.isdigit() for char in password)
+            and any(char in string.punctuation for char in password)
+        ):
+            return password
+
 
 if __name__ == "__main__":
-    print("Password Security Analyzer (local-only)")
-    choice = input("[1] Analyze password  [2] Generate password: ").strip()
+    print("Password Security Analyzer")
+    choice = input("[1] Check a password  [2] Generate a password: ").strip()
+
     if choice == "2":
-        try: length = max(12, min(128, int(input("Length (12-128): "))))
-        except ValueError: length = 20
-        print("Generated password:", generate(length))
+        try:
+            requested_length = int(input("Length (12-128): "))
+            print("Generated password:", generate(requested_length))
+        except ValueError as error:
+            print(f"Error: {error}")
     else:
-        pwd = getpass.getpass("Enter password (hidden; not stored): ")
-        result = analyze(pwd)
-        print(f"\nResult: {result['label']} ({result['score']}/100)")
-        print("Estimated entropy:", result["estimated_entropy_bits"], "bits")
-        for issue in result["issues"]: print("-", issue)
-        if not result["issues"]: print("No basic composition issues detected.")
+        entered_password = getpass.getpass("Password (input is hidden): ")
+        result = analyze(entered_password)
+        print(f"\nEstimate: {result['label']} ({result['score']}/100)")
+        print(f"Estimated entropy: {result['estimated_entropy_bits']} bits")
+        for issue in result["issues"]:
+            print("-", issue)
+        if not result["issues"]:
+            print("No basic composition issues found.")

@@ -1,13 +1,9 @@
 # Network Traffic Anomaly Detector
 
-A safe offline analyzer for CSV network-flow exports. It does not capture packets or scan hosts.
+Reviews an exported flow CSV and flags source addresses with many distinct destination ports or high total byte counts.
 
-## CSV format
-`timestamp,src_ip,dst_ip,dst_port,bytes,protocol`
-
-## Run
 ```bash
-python traffic_detector.py sample_flows.csv --ports-threshold 10
+python traffic_detector.py sample_flows.csv --ports-threshold 5
 ```
 
-The detector flags source IPs contacting many distinct destination ports and unusually high byte totals. Tune thresholds for your environment.
+Required columns: `timestamp,src_ip,dst_ip,dst_port,bytes,protocol`. It reads exported data only; it does not capture packets or scan hosts. Thresholds need to be adjusted for the network being reviewed.

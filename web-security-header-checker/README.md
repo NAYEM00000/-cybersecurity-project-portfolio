@@ -1,11 +1,10 @@
 # Web Security Header Checker
 
-Checks common HTTP response security headers and cookie flags for a URL you are authorized to assess.
+Checks common response security headers and cookie flags for one URL.
 
-## Install and run
 ```bash
-pip install -r ../requirements.txt
+python -m pip install -r ../requirements.txt
 python header_checker.py https://example.com --json report.json
 ```
 
-Makes one GET request, does not crawl or exploit the target. Network access is required.
+It sends one normal HTTP GET request and follows redirects. Use it only for sites you are authorized to assess. It is not a vulnerability scanner.

@@ -1,15 +1,9 @@
 # Authentication Log Analyzer
 
-Analyzes a simple CSV export of authentication events and highlights repeated failed logins.
+Counts failed sign-ins by username and source IP in a CSV export.
 
-## CSV format
-`timestamp,username,source_ip,status`
-
-Status should be `success` or `failed`.
-
-## Run
 ```bash
 python log_analyzer.py sample_auth.csv --threshold 5
 ```
 
-Use only logs you are authorized to access. The sample data is synthetic.
+Required columns: `timestamp,username,source_ip,status`. The included CSV is synthetic. The tool counts the whole file; it does not apply a time window.

@@ -1,6 +1,6 @@
-# Project Demo Guide
+# Running the projects
 
-Run commands from each project's folder. Use only systems and data you own or are authorized to assess.
+These are command-line programs. Run each command from the matching project folder.
 
 ## Password Security Analyzer
 
@@ -9,7 +9,7 @@ cd password-security-analyzer
 python password_analyzer.py
 ```
 
-Choose local password analysis or random password generation. The entered password is hidden and is not stored or transmitted.
+Choose whether to check a password or generate one. Password input is hidden and is not written to a file.
 
 ## Web Security Header Checker
 
@@ -18,7 +18,7 @@ python -m pip install -r ../requirements.txt
 python header_checker.py https://example.com --json report.json
 ```
 
-Sends one ordinary GET request. Only check URLs you are authorized to assess.
+Makes one normal HTTP request. Check only URLs you are allowed to assess.
 
 ## Authentication Log Analyzer
 
@@ -26,15 +26,15 @@ Sends one ordinary GET request. Only check URLs you are authorized to assess.
 python log_analyzer.py sample_auth.csv --threshold 5
 ```
 
-CSV columns: `timestamp,username,source_ip,status`. The included sample data is synthetic.
+Expected columns: `timestamp,username,source_ip,status`.
 
 ## Network Traffic Anomaly Detector
 
 ```bash
-python traffic_detector.py sample_flows.csv --ports-threshold 5 --bytes-threshold 10000000
+python traffic_detector.py sample_flows.csv --ports-threshold 5
 ```
 
-CSV columns: `timestamp,src_ip,dst_ip,dst_port,bytes,protocol`. This tool analyzes exported flow data; it does not capture packets.
+Expected columns: `timestamp,src_ip,dst_ip,dst_port,bytes,protocol`.
 
 ## Phishing URL Risk Analyzer
 
@@ -42,14 +42,25 @@ CSV columns: `timestamp,src_ip,dst_ip,dst_port,bytes,protocol`. This tool analyz
 python phishing_analyzer.py "http://login-example.test/verify?account=1"
 ```
 
-The URL is parsed locally and is never opened. Scores are heuristic indicators, not definitive verdicts.
+The script parses the URL locally and does not visit it.
 
-## Run tests
-
-From the repository root:
+## File Integrity Monitor
 
 ```bash
-python -m unittest discover -s tests -v
+python file_integrity_monitor.py baseline ./sample-folder --manifest ./baseline.json
+python file_integrity_monitor.py verify ./sample-folder --manifest ./baseline.json
 ```
 
-These are command-line tools, not graphical applications. Add screenshots only after capturing genuine local runs; do not present illustrative output as real execution evidence.
+Keep the baseline outside the monitored folder.
+
+## TLS Certificate Inspector
+
+```bash
+python tls_certificate_inspector.py example.com
+```
+
+Makes one TLS connection to the specified host and port. Use only hosts you are authorized to check.
+
+## Capture real screenshots
+
+Run the commands on your own machine and capture the terminal after the program has produced its output. Do not use invented terminal output as evidence. On Windows, `Win + Shift + S` opens Snipping Tool; on macOS, use `Shift + Command + 4`.

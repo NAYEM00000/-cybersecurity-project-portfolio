@@ -1,10 +1,9 @@
 # Phishing URL Risk Analyzer
 
-An explainable offline heuristic that scores URL characteristics without opening the URL.
+Checks a few URL characteristics and returns an explainable risk score. It does not visit the URL.
 
-## Run
 ```bash
 python phishing_analyzer.py "http://login-example.test/verify?account=1"
 ```
 
-This is not a reputation service or a definitive classifier. Do not click suspicious links to test them.
+The score is a heuristic, not a reputation lookup or a verdict that a link is malicious. Do not click suspicious links to test them.

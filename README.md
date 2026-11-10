@@ -1,25 +1,24 @@
-# Cybersecurity Project Portfolio
+# Cybersecurity Projects
 
-[![Python CI](https://github.com/NAYEM00000/-cybersecurity-project-portfolio/actions/workflows/python-ci.yml/badge.svg)](https://github.com/NAYEM00000/-cybersecurity-project-portfolio/actions/workflows/python-ci.yml)
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
-![Focus](https://img.shields.io/badge/Focus-Defensive%20Security-0A7EA4)
+I started this repository to keep the small Python tools I build while learning more about defensive security. Most of them are command-line programs. They use sample files or make one clearly described request, so it is possible to see what they do without setting up a lab.
 
-A beginner-to-intermediate portfolio of five practical **defensive cybersecurity** tools written in Python.
+The projects are for practice and authorized checks. They are not meant to replace a proper security product or a professional assessment.
 
 ## Projects
 
-| Project | Purpose | Run from its project folder |
-|---|---|---|
-| Password Security Analyzer | Local password feedback and secure random password generation | `python password_analyzer.py` |
-| Web Security Header Checker | Check HTTP security headers and cookie attributes | `python header_checker.py https://example.com` |
-| Authentication Log Analyzer | Identify repeated failed logins in CSV exports | `python log_analyzer.py sample_auth.csv --threshold 5` |
-| Network Traffic Anomaly Detector | Flag unusual flow volumes and many destination ports | `python traffic_detector.py sample_flows.csv --ports-threshold 5` |
-| Phishing URL Risk Analyzer | Offline URL-risk heuristics; never visits submitted URLs | `python phishing_analyzer.py "http://login-example.test/verify"` |
+| Project | What it does |
+|---|---|
+| [Password Security Analyzer](password-security-analyzer/) | Gives basic password feedback and generates random passwords locally. |
+| [Web Security Header Checker](web-security-header-checker/) | Checks common HTTP response headers and cookie flags for one URL. |
+| [Authentication Log Analyzer](authentication-log-analyzer/) | Counts failed sign-ins in a CSV log and highlights repeated failures. |
+| [Network Traffic Anomaly Detector](network-traffic-anomaly-detector/) | Looks at exported flow records for high byte counts and many destination ports. |
+| [Phishing URL Risk Analyzer](phishing-url-risk-analyzer/) | Checks URL characteristics offline; it does not open the link. |
+| [File Integrity Monitor](file-integrity-monitor/) | Creates a SHA-256 baseline and reports files that were added, changed, or removed. |
+| [TLS Certificate Inspector](tls-certificate-inspector/) | Connects once to a host and reports details about its verified TLS certificate. |
 
-## Quick start
+## Run locally
 
-Requirements: Python 3.10 or newer.
+Python 3.10 or newer is required.
 
 ```bash
 git clone https://github.com/NAYEM00000/-cybersecurity-project-portfolio.git
@@ -27,24 +26,26 @@ cd -cybersecurity-project-portfolio
 python -m pip install -r requirements.txt
 ```
 
-Run each tool from its own directory. The web checker requires `requests`; the other tools use the Python standard library.
+Each project has its own README with an example command. The web header checker uses `requests`; the other tools use the Python standard library.
 
-## Tests
+## Run the tests
 
 ```bash
 python -m unittest discover -s tests -v
 python -m compileall -q .
 ```
 
-GitHub Actions runs the tests and compile check on pushes and pull requests.
+The GitHub Actions workflow runs these checks when code is pushed or a pull request is opened.
 
-## Responsible use
+## A few limits worth knowing
 
-Use these tools only on systems, URLs, and data you own or are explicitly authorized to assess. The web checker sends one ordinary GET request; it does not crawl or exploit targets. The traffic detector analyzes CSV exports and does not capture packets. The phishing analyzer is offline and does not open submitted URLs. Passwords entered into the password analyzer are not saved or transmitted.
+- The password score is a rough estimate based on character groups. It is not a password-audit service.
+- Header and URL checks are simple indicators. A missing header or a high URL score does not prove that a site is vulnerable or malicious.
+- The log and traffic tools only analyze the CSV fields provided. They do not know what is normal for a particular organization.
+- The file monitor compares hashes with a baseline. Keep the baseline somewhere separate from the folder being monitored.
+- The TLS inspector uses Python's default certificate verification. It does not perform a full TLS configuration audit or check certificate revocation.
 
-## Limitations
-
-All detections are heuristic and may produce false positives or false negatives. Entropy estimates are not guarantees; URL scores are not reputation verdicts; traffic thresholds need environment-specific tuning. These educational projects are not substitutes for professional security testing, SIEM, endpoint protection, or incident response.
+Only test systems, URLs, and data that you own or have permission to assess. Sample log and traffic records in this repository are synthetic.
 
 ## License
 

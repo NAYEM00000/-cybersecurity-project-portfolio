@@ -1,10 +1,9 @@
 # Password Security Analyzer
 
-A local CLI tool that estimates password strength, explains weaknesses, and generates random passwords.
+A small local tool for checking basic password characteristics or generating a random password.
 
-## Run
 ```bash
 python password_analyzer.py
 ```
 
-No password is transmitted or saved. Entropy is a rough estimate based on character classes, not a guarantee of resistance to guessing.
+The generator uses Python's `secrets` module. The score is only a rough estimate based on length and character groups; it does not check breached-password databases or guessability patterns.

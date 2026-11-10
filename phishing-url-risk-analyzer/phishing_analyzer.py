@@ -1,37 +1,103 @@
-import argparse, ipaddress
+import argparse
+import ipaddress
 from urllib.parse import urlparse
 
-SHORTENERS = {"bit.ly", "tinyurl.com", "t.co", "is.gd", "ow.ly"}
-SUSPICIOUS_WORDS = {"login", "verify", "account", "secure", "update", "password", "wallet", "confirm"}
 
-def analyze(url):
-    parsed = urlparse(url if "://" in url else "http://" + url)
-    host = (parsed.hostname or "").lower()
-    reasons, score = [], 0
-    if parsed.scheme != "https":
-        score += 15; reasons.append("URL does not use HTTPS")
-    if "@" in parsed.netloc:
-        score += 25; reasons.append("Contains @ in authority section")
+SHORTENERS = {"bit.ly", "tinyurl.com", "t.co", "is.gd", "ow.ly"}
+SUSPICIOUS_WORDS = {
+    "login", "verify", "account", "secure",
+    "update", "password", "wallet", "confirm",
+}
+
+
+def _is_shortener(host: str) -> bool:
+    return any(
+        host == domain or host.endswith("." + domain)
+        for domain in SHORTENERS
+    )
+
+
+def analyze(url: str) -> dict:
+    """Score a few URL warning signs without making a network request."""
+    if not isinstance(url, str) or not url.strip():
+        raise ValueError("Provide a non-empty URL.")
+
+    url = url.strip()
+    if any(character.isspace() for character in url):
+        raise ValueError("The URL must not contain whitespace.")
+
+    candidate = url if "://" in url else "http://" + url
+    parsed = urlparse(candidate)
+    if parsed.scheme.lower() not in {"http", "https"} or not parsed.hostname:
+        raise ValueError("Provide a valid http:// or https:// URL.")
+    if parsed.username is not None or parsed.password is not None:
+        raise ValueError("The URL contains user information before the host.")
+    try:
+        parsed.port
+    except ValueError as error:
+        raise ValueError("The URL contains an invalid port.") from error
+
+    host = parsed.hostname.lower().rstrip(".")
+    reasons = []
+    score = 0
+
+    if parsed.scheme.lower() != "https":
+        score += 15
+        reasons.append("The URL does not use HTTPS.")
     try:
         ipaddress.ip_address(host)
-        score += 25; reasons.append("Uses an IP address instead of a domain")
     except ValueError:
         pass
-    if host in SHORTENERS:
-        score += 20; reasons.append("Uses a known URL shortener")
+    else:
+        score += 25
+        reasons.append("The host is an IP address rather than a domain.")
+
+    if _is_shortener(host):
+        score += 20
+        reasons.append("The URL uses a known shortening service.")
     if len(url) > 100:
-        score += 10; reasons.append("Unusually long URL")
+        score += 10
+        reasons.append("The URL is unusually long.")
     if host.count("-") >= 2:
-        score += 10; reasons.append("Domain contains multiple hyphens")
-    matches = sorted(w for w in SUSPICIOUS_WORDS if w in (host + parsed.path + parsed.query).lower())
-    if matches:
-        score += min(20, 5 * len(matches)); reasons.append("Sensitive-action words: " + ", ".join(matches))
-    score = min(100, score)
-    label = "Low" if score < 25 else "Medium" if score < 50 else "High"
-    return {"url": url, "risk_score": score, "risk_level": label, "reasons": reasons}
+        score += 10
+        reasons.append("The domain contains several hyphens.")
+
+    matched_words = sorted(
+        word
+        for word in SUSPICIOUS_WORDS
+        if word in (host + parsed.path + parsed.query).lower()
+    )
+    if matched_words:
+        score += min(20, 5 * len(matched_words))
+        reasons.append(
+            "Sensitive-action words appear in the URL: "
+            + ", ".join(matched_words)
+        )
+
+    score = min(score, 100)
+    if score < 25:
+        risk_level = "Low"
+    elif score < 50:
+        risk_level = "Medium"
+    else:
+        risk_level = "High"
+
+    return {
+        "url": url,
+        "risk_score": score,
+        "risk_level": risk_level,
+        "reasons": reasons,
+    }
+
 
 if __name__ == "__main__":
-    p = argparse.ArgumentParser(description="Offline phishing URL heuristic; does not visit URLs.")
-    p.add_argument("url")
-    a = p.parse_args()
-    print(analyze(a.url))
+    parser = argparse.ArgumentParser(
+        description="Check URL warning signs offline; the URL is not opened."
+    )
+    parser.add_argument("url")
+    args = parser.parse_args()
+
+    try:
+        print(analyze(args.url))
+    except ValueError as error:
+        raise SystemExit(f"Error: {error}")
